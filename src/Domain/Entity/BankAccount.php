@@ -4,7 +4,6 @@ namespace App\Domain\Entity;
 
 use App\Domain\Enum\Currency;
 use App\Domain\ValueObject\Decimal;
-use App\Domain\ValueObject\TransactionDate;
 
 class BankAccount
 {
