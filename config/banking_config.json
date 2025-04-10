@@ -1,0 +1,9 @@
+{
+  "fee_percentage": 0.005,
+  "max_daily_debits": 3,
+  "supported_currencies": [
+    "PLN",
+    "EUR",
+    "USD"
+  ]
+}

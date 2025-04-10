@@ -1,0 +1,23 @@
+# Composer
+/vendor/
+composer.lock
+
+# PHPUnit
+.phpunit.result.cache
+
+# Docker
+.env
+*.log
+*.pid
+
+# IDEs
+.idea/
+.vscode/
+
+# Coverage
+coverage/
+html-coverage/
+
+# OS files
+.DS_Store
+Thumbs.db
