@@ -3,6 +3,7 @@
 namespace App\Domain\Enum;
 
 use App\Domain\Config\BankingConfig;
+use InvalidArgumentException;
 
 enum Currency: string
 {
@@ -13,7 +14,7 @@ enum Currency: string
     public static function fromCode(string $code, BankingConfig $config): Currency
     {
         if (!self::isValid($code, $config)) {
-            throw new \InvalidArgumentException("Unsupported currency: $code");
+            throw new InvalidArgumentException("Unsupported currency: $code");
         }
 
         return Currency::from($code);

@@ -24,12 +24,12 @@ readonly class TransferMoneyService
     {
         $debit = new Payment($amount, $currency, Direction::DEBIT);
         $credit = new Payment($amount, $currency, Direction::CREDIT);
-        $debit = $this->bankingService->apply($from, $debit);
-        $credit = $this->bankingService->apply($to, $credit);
+        $this->bankingService->apply($from, $debit);
+        $this->bankingService->apply($to, $credit);
 
         $event = new MoneyTransferredEvent($from, $debit);
-
         $this->dispatcher->dispatch($event);
+
         $event = new MoneyTransferredEvent($to, $credit);
         $this->dispatcher->dispatch($event);
     }

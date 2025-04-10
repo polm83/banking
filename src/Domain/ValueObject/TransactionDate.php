@@ -5,9 +5,9 @@ namespace App\Domain\ValueObject;
 use DateTimeImmutable;
 use InvalidArgumentException;
 
-class TransactionDate
+readonly class TransactionDate
 {
-    public readonly DateTimeImmutable $date;
+    public DateTimeImmutable $date;
 
     public function __construct(string|DateTimeImmutable $value)
     {

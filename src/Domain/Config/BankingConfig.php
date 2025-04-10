@@ -4,12 +4,12 @@ namespace App\Domain\Config;
 
 use App\Domain\ValueObject\Decimal;
 
-class BankingConfig
+readonly class BankingConfig
 {
     public function __construct(
-        private readonly Decimal $feePercentage = new Decimal(0),
-        private readonly int     $maxDailyDebits = 0,
-        private readonly array   $supportedCurrencies = []
+        private Decimal $feePercentage = new Decimal(0),
+        private int     $maxDailyDebits = 0,
+        private array   $supportedCurrencies = []
     )
     {
     }

@@ -12,23 +12,23 @@ use App\Domain\ValueObject\Payment;
 use App\Domain\ValueObject\TransactionDate;
 use DomainException;
 
-class BankingService implements BankingServiceInterface
+readonly class BankingService implements BankingServiceInterface
 {
     public function __construct(
-        private readonly BankingConfig                 $config,
-        private readonly TransferLimitTrackerInterface $limitTracker
+        private BankingConfig                 $config,
+        private TransferLimitTrackerInterface $limitTracker
     )
     {
     }
 
-    public function apply(BankAccount $account, Payment $payment): Payment
+    public function apply(BankAccount $account, Payment $payment): void
     {
         $this->checkCurrency($account, $payment);
 
         if ($payment->getDirection() == Direction::CREDIT) {
-            return $this->credit($account, $payment);
+            $this->credit($account, $payment);
         } else {
-            return $this->debit($account, $payment);
+            $this->debit($account, $payment);
         }
     }
 
@@ -39,14 +39,12 @@ class BankingService implements BankingServiceInterface
         }
     }
 
-    private function credit(BankAccount $account, Payment $payment): Payment
+    private function credit(BankAccount $account, Payment $payment): void
     {
         $account->increaseBalance($payment->getAmount());
-
-        return $payment;
     }
 
-    private function debit(BankAccount $account, Payment $payment): Payment
+    private function debit(BankAccount $account, Payment $payment): void
     {
         $this->checkDailyDebits($account, $date = new TransactionDate($payment->getDate()));
 
@@ -59,18 +57,11 @@ class BankingService implements BankingServiceInterface
 
         $account->decreaseBalance($total);
         $this->limitTracker->increaseDailyDebits($account, $date);
-        $account->increaseDailyDebits();
-
-        return $payment;
     }
 
     private function checkDailyDebits(BankAccount $account, TransactionDate $date): void
     {
-        if (!$account->getLastDebitDate() || !$account->getLastDebitDate()->equals($date)) {
-            $account->resetDailyDebits($date);
-        }
-
-        if ($account->getDailyDebits() >= $this->config->getMaxDailyDebits()) {
+        if ($this->limitTracker->getDailyDebits($account, $date) >= $this->config->getMaxDailyDebits()) {
             throw new DomainException("Daily debit limit exceeded.", DomainError::DAILY_LIMIT_EXCEEDED->value);
         }
     }

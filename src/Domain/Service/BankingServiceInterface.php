@@ -7,5 +7,5 @@ use App\Domain\ValueObject\Payment;
 
 interface BankingServiceInterface
 {
-    public function apply(BankAccount $account, Payment $payment): Payment;
+    public function apply(BankAccount $account, Payment $payment): void;
 }
